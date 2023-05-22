@@ -18,7 +18,9 @@ while sleep 1
 end
 
 # Assign an nmap Agent to the REST service for it to provide us with scanner Instances.
-request :put, 'agent/url', Peplum::Nmap::Application.spawn( :agent, daemonize: true ).url
+nmap_agent = Peplum::Nmap::Application.spawn( :agent, daemonize: true )
+request :put, 'agent/url', nmap_agent.url
+at_exit { nmap_agent.shutdown rescue nil }
 
 # Create a new scanner Instance (process) and run a scan with the following options.
 request :post, 'instances', {

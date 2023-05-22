@@ -3,6 +3,7 @@ require 'peplum/nmap'
 
 # Spawn an nmap Agent as a daemon.
 nmap_agent = Peplum::Nmap::Application.spawn( :agent, daemonize: true )
+at_exit { nmap_agent.shutdown rescue nil }
 
 # Spawn and connect to an nmap Instance.
 nmap = Peplum::Nmap::Application.connect( nmap_agent.spawn )
