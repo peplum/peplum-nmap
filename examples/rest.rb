@@ -28,7 +28,7 @@ request :post, 'instances', {
     objects:     ['192.168.1.*'],
     max_workers: 5
   },
-  native: {
+  payload: {
     connect_scan:   true,
     service_scan:   true,
     default_script: true

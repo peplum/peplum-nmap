@@ -6,13 +6,13 @@ module Peplum
 class Nmap
 
   require_relative "nmap/version"
-  require_relative "nmap/native"
+  require_relative "nmap/payload"
 
   class Error < Peplum::Error; end
 
   class Application < Peplum::Application
-    def native_app
-      Native
+    def payload
+      Payload
     end
   end
 

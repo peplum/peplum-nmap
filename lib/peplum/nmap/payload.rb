@@ -5,7 +5,7 @@ require 'tmpdir'
 module Peplum
 class Nmap
 
-module Native
+module Payload
 
   DEFAULT_OPTIONS = {
     'output_normal' => '/dev/null',
