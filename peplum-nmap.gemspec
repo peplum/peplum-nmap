@@ -14,7 +14,6 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.6.0"
 
   spec.files  = Dir.glob( 'bin/*')
-  spec.files += %w(bin/.gitkeep)
   spec.files += Dir.glob( 'lib/**/*')
   spec.files += Dir.glob( 'examples/**/*')
   spec.files += %w(peplum-nmap.gemspec)
