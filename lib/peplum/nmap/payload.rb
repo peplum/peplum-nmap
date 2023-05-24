@@ -21,8 +21,16 @@ module Payload
   end
 
   def run( targets, options )
-    _run options.merge( targets: targets, output_xml: SCAN_REPORT )
-    report_from_xml( SCAN_REPORT )
+    # Do it this way so we'll be able to have progress reports per scanned host.
+    merge( targets.map do |target|
+      _run options.merge( targets: target, output_xml: SCAN_REPORT )
+
+      report = report_from_xml( SCAN_REPORT )
+      next if !report.include?('hosts')
+
+      Nmap::Application.master.info.update report
+      report
+    end.compact )
   end
 
   def group( targets, chunks )
@@ -45,7 +53,12 @@ module Payload
          ping:       true,
          output_xml: PING_REPORT
 
-    hosts_from_xml( PING_REPORT )
+    hosts = hosts_from_xml( PING_REPORT )
+
+    # Seed the progress data with the live hosts
+    hosts.each { |h| Services::Info.progress_data['hosts'][h] ||= {} }
+
+    hosts
   end
 
   def set_default_options( nmap )

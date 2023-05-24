@@ -39,6 +39,9 @@ request :post, 'instances', {
 instance_id = response_data['id']
 
 while sleep( 1 )
+  request :get, "instances/#{instance_id}/info/progress"
+  ap response_data
+
   # Continue looping while instance status is 'busy'.
   request :get, "instances/#{instance_id}"
   break if !response_data['busy']

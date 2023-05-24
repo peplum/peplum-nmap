@@ -11,6 +11,13 @@ class Nmap
   class Error < Peplum::Error; end
 
   class Application < Peplum::Application
+
+    require_relative "nmap/services/info"
+    instance_service_for :info, Services::Info
+
+    require_relative "nmap/services/rest_proxy"
+    rest_service_for :info, Services::RESTProxy
+
     def payload
       Payload
     end

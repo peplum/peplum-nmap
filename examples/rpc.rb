@@ -24,7 +24,10 @@ nmap.run(
 )
 
 # Waiting to complete.
-sleep 1 while nmap.running?
+while nmap.running?
+  ap nmap.info.progress
+  sleep 1
+end
 
 # Hooray!
 puts JSON.pretty_generate( nmap.generate_report.data )
