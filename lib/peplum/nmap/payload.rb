@@ -33,7 +33,7 @@ module Payload
     end.compact )
   end
 
-  def group( targets, chunks )
+  def split( targets, chunks )
     @hosts ||= self.live_hosts( targets )
     @hosts.chunk( chunks ).reject(&:empty?)
   end
