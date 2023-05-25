@@ -15,7 +15,7 @@ class Info
   end
 
   def update( data )
-    self.class.progress_data.merge! Payload.merge( [self.class.progress_data, data] )
+    self.class.progress_data.merge! data
     nil
   end
 
