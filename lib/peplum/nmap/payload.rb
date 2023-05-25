@@ -6,6 +6,7 @@ module Peplum
 class Nmap
 
 module Payload
+  include Peplum::Application::Payload
 
   DEFAULT_OPTIONS = {
     'output_normal' => '/dev/null',
@@ -22,28 +23,20 @@ module Payload
 
   def run( targets, options )
     # Do it this way so we'll be able to have progress reports per scanned host.
-    merge( targets.map do |target|
+    targets.map do |target|
       _run options.merge( targets: target, output_xml: SCAN_REPORT )
 
       report = report_from_xml( SCAN_REPORT )
-      next if !report.include?('hosts')
+      next if report.empty?
 
       Nmap::Application.master.info.update report
       report
-    end.compact )
+    end.compact
   end
 
   def split( targets, chunks )
     @hosts ||= self.live_hosts( targets )
     @hosts.chunk( chunks ).reject(&:empty?)
-  end
-
-  def merge( data )
-    report = { 'hosts' => {} }
-    data.each do |d|
-      report['hosts'].merge! d['hosts']
-    end
-    report
   end
 
   private
@@ -56,7 +49,7 @@ module Payload
     hosts = hosts_from_xml( PING_REPORT )
 
     # Seed the progress data with the live hosts
-    hosts.each { |h| Services::Info.progress_data['hosts'][h] ||= {} }
+    hosts.each { |h| Services::Info.progress_data[h] ||= {} }
 
     hosts
   end
@@ -93,12 +86,11 @@ module Payload
     report_data = {}
     ::Nmap::XML.open( xml ) do |xml|
       xml.each_host do |host|
-        report_data['hosts'] ||= {}
-        report_data['hosts'][host.ip] = host_to_hash( host )
+        report_data[host.ip] = host_to_hash( host )
 
-        report_data['hosts'][host.ip]['ports'] = {}
+        report_data[host.ip]['ports'] = {}
         host.each_port do |port|
-          report_data['hosts'][host.ip]['ports'][port.number] = port_to_hash( port )
+          report_data[host.ip]['ports'][port.number] = port_to_hash( port )
         end
       end
     end

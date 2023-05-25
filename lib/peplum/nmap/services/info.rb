@@ -6,7 +6,7 @@ class Info
 
   class <<self
     def progress_data
-      @progress_data ||= { 'hosts' => {} }
+      @progress_data ||= {}
     end
   end
 
@@ -15,7 +15,7 @@ class Info
   end
 
   def update( data )
-    self.class.progress_data['hosts'].merge! Payload.merge( [self.class.progress_data, data] )['hosts']
+    self.class.progress_data.merge! Payload.merge( [self.class.progress_data, data] )
     nil
   end
 
