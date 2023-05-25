@@ -11,9 +11,15 @@ quite time consuming task.
 
 ## Installation
 
+### Source
+
     $ git clone git@github.com:peplum/peplum-nmap.git
     $ cd peplum-nmap
     $ bundle install
+
+### Gem
+
+    $ gem install peplum-nmap
 
 ## Usage
 
